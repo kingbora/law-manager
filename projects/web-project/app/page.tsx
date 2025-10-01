@@ -1,3 +1,5 @@
+'use client';
+
 import { Card, Space, Typography } from 'antd';
 
 export default function HomePage() {
