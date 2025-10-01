@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/h" 2>/dev/null || true
+
+# Stage any fixes from eslint --fix & prettier before commit
+pnpm lint-staged || {
+  echo "\nHusky pre-commit: lint-staged failed" >&2
+  exit 1
+}

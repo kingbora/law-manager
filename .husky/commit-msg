@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/h" 2>/dev/null || true
+
+# Basic commit message guard (length > 5)
+MSG_FILE=$1
+MSG_CONTENT=$(head -n 1 "$MSG_FILE")
+if [ ${#MSG_CONTENT} -lt 5 ]; then
+  echo "Commit message too short." >&2
+  exit 1
+fi

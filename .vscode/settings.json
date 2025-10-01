@@ -1,0 +1,10 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "eslint.useFlatConfig": false,
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "prettier.configPath": "${workspaceFolder}/.prettierrc.cjs"
+}
