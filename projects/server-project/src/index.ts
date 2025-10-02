@@ -1,7 +1,9 @@
-import { createApp, eventHandler, toNodeListener } from 'h3';
-import { readdirSync } from 'node:fs';
+import { createApp, eventHandler, fromNodeMiddleware, toNodeListener } from 'h3';
+import { readdirSync, statSync } from 'node:fs';
 import http from 'node:http';
 import { join } from 'node:path';
+// eslint-disable-next-line import/no-unresolved
+import { authBasePath, authHandler } from './auth';
 
 const app = createApp();
 
@@ -9,6 +11,7 @@ const app = createApp();
 const apiRoot = join(process.cwd(), 'src', 'api');
 for (const dir of readdirSync(apiRoot)) {
   const routeDir = join(apiRoot, dir);
+  if (!statSync(routeDir).isDirectory()) continue;
   try {
     const mod = await import(join(routeDir, 'index.get.ts'));
     if (mod?.default) {
@@ -18,6 +21,8 @@ for (const dir of readdirSync(apiRoot)) {
     // ignore if file not exists
   }
 }
+
+app.use(authBasePath, fromNodeMiddleware(authHandler));
 
 // root route
 app.use(
