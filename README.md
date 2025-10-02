@@ -36,6 +36,21 @@ pnpm dev:mobile   # 启动移动端 (Expo Dev Tools)
 pnpm dev
 ```
 
+### Web 端鉴权配置
+
+Web 项目默认与服务器交互完成登录/注册。请在 `projects/web-project/.env.local` 中配置：
+
+```
+NEXT_PUBLIC_SERVER_BASE_URL=http://localhost:4000
+NEXT_PUBLIC_API_PREFIX=/api
+```
+
+运行 `pnpm dev:web` 后可访问：
+
+- `/login`：账户登录
+- `/register`：账户注册
+- `/`：受保护主页，显示当前用户信息，可退出登录
+
 ## 服务端自动路由说明
 
 在 `projects/server-project/src/api` 下创建目录，如 `case`，并在目录内添加 `index.get.ts`、`index.post.ts` 等文件即可暴露对应的 HTTP 方法，如：
