@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 
-import { ApiError } from '../../../lib/api-client';
+import { ApiError } from '@law-manager/auth-client';
 import { useAuth } from '../../auth-context';
 
 export const dynamic = 'force-dynamic';
@@ -44,7 +44,7 @@ function RegisterPageContent() {
       await register(values);
       message.success('注册成功，已自动为您登录');
       router.replace(redirectTo);
-    } catch (err) {
+    } catch (err: unknown) {
       const hint =
         err instanceof ApiError ? err.message : '注册失败，请稍后重试';
       setFormError(hint);

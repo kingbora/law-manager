@@ -8,7 +8,8 @@
     "declarationMap": true,
     "sourceMap": true,
     "moduleResolution": "bundler",
-    "module": "esnext"
+    "module": "esnext",
+    "jsx": "react-jsx"
   },
   "include": ["src/**/*"],
   "exclude": ["dist", "node_modules"]

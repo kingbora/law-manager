@@ -16,7 +16,7 @@
     }
   },
   "scripts": {
-    "clean": "rm -rf dist"
+    "clean": "rimraf dist node_modules"
   },
   "dependencies": {
     "zod": "^3.23.8"

@@ -9,3 +9,4 @@ expo/
 .env*
 coverage
 *.log
+tsconfig.tsbuildinfo

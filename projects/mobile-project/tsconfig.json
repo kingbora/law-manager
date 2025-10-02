@@ -3,9 +3,31 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "Node",
-    "lib": ["ES2021"],
-    "jsx": "react-native"
+    "jsx": "react-native",
+    "baseUrl": "./",
+    "paths": {
+      "@law-manager/auth-client": [
+        "../../packages/auth-client/src/index.tsx"
+      ],
+      "@law-manager/api-schema": [
+        "../../packages/api-schema/src/index.ts"
+      ],
+      "@law-manager/api-schema/*": [
+        "../../packages/api-schema/src/*"
+      ]
+    },
+    "skipLibCheck": true
   },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "App.tsx",
+    "app.json",
+    "types/**/*.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

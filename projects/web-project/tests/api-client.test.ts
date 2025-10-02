@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { buildUrl, normalizeBase, normalizePrefix } from './api-client';
+import { createApiClient, normalizeBase, normalizePrefix } from '@law-manager/auth-client';
 
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -22,7 +22,8 @@ describe('api-client config helpers', () => {
   it('builds url by combining base, prefix and path', () => {
     vi.stubEnv('NEXT_PUBLIC_SERVER_BASE_URL', 'https://api.example.com/');
     vi.stubEnv('NEXT_PUBLIC_API_PREFIX', '/v1');
-    expect(buildUrl('auth/login')).toBe('https://api.example.com/v1/auth/login');
-    expect(buildUrl('/auth/session')).toBe('https://api.example.com/v1/auth/session');
+    const api = createApiClient();
+    expect(api.buildUrl('auth/login')).toBe('https://api.example.com/v1/auth/login');
+    expect(api.buildUrl('/auth/session')).toBe('https://api.example.com/v1/auth/session');
   });
 });

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 
-import { ApiError } from '../../../lib/api-client';
+import { ApiError } from '@law-manager/auth-client';
 import { useAuth } from '../../auth-context';
 
 export const dynamic = 'force-dynamic';
@@ -39,7 +39,7 @@ function LoginPageContent() {
       await login(values);
       message.success('登录成功');
       router.replace(redirectTo);
-    } catch (err) {
+    } catch (err: unknown) {
       const hint =
         err instanceof ApiError ? err.message : '登录失败，请稍后重试';
       setFormError(hint);
