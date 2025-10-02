@@ -6,5 +6,5 @@
   },
   "eslint.useFlatConfig": false,
   "eslint.workingDirectories": [{ "mode": "auto" }],
-  "prettier.configPath": "${workspaceFolder}/.prettierrc.cjs"
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint"
 }

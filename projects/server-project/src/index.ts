@@ -2,7 +2,6 @@ import { createApp, eventHandler, fromNodeMiddleware, toNodeListener } from 'h3'
 import { readdirSync, statSync } from 'node:fs';
 import http from 'node:http';
 import { join } from 'node:path';
-// eslint-disable-next-line import/no-unresolved
 import { authBasePath, authHandler } from './auth';
 
 const app = createApp();

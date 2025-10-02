@@ -22,8 +22,21 @@ module.exports = {
     sourceType: 'module',
   },
   settings: {
-    react: { version: 'detect' },
+    react: { version: '18.3.1' },
     'import/core-modules': ['react-native'],
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.cjs', '.mjs', '.ts', '.tsx'],
+      },
+      typescript: {
+        project: [
+          './projects/server-project/tsconfig.json',
+          './projects/web-project/tsconfig.json',
+          './projects/mobile-project/tsconfig.json',
+          './packages/tsconfig/base.json',
+        ],
+      },
+    },
   },
   plugins: [
     '@typescript-eslint',
@@ -31,7 +44,6 @@ module.exports = {
     'import',
     'unused-imports',
     'simple-import-sort',
-    'prettier',
     'react-native',
   ],
   extends: [
@@ -40,10 +52,8 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
-    'prettier',
   ],
   rules: {
-    'prettier/prettier': ['error'],
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
@@ -56,11 +66,35 @@ module.exports = {
     'simple-import-sort/exports': 'off',
     'import/order': 'off',
     'import/no-unresolved': 'error',
+    semi: ['error', 'always'],
+    quotes: ['error', 'single', { avoidEscape: true }],
+    'arrow-parens': ['error', 'always'],
+    'object-curly-spacing': ['error', 'always'],
+    'comma-dangle': ['error', 'always-multiline'],
+    'space-before-function-paren': [
+      'error',
+      { anonymous: 'never', named: 'never', asyncArrow: 'always' },
+    ],
+    'max-len': [
+      'warn',
+      {
+        code: 100,
+        ignoreComments: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
+        ignoreUrls: true,
+      },
+    ],
   },
   overrides: [
     {
       files: ['projects/web-project/**/*.{ts,tsx}'],
-      extends: ['next/core-web-vitals', 'prettier'],
+      extends: ['next/core-web-vitals'],
+      settings: {
+        next: {
+          rootDir: ['projects/web-project'],
+        },
+      },
       rules: {
         // Next.js already handles image alt warnings etc.
         'next/no-html-link-for-pages': 'off',
@@ -68,7 +102,7 @@ module.exports = {
     },
     {
       files: ['projects/mobile-project/**/*.{ts,tsx}'],
-      extends: ['plugin:react-native/all', 'prettier'],
+      extends: ['plugin:react-native/all'],
       env: { 'react-native/react-native': true },
       rules: {
         'react-native/no-inline-styles': 'off', // allow simple inline styles initially

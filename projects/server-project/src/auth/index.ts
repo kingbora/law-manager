@@ -1,12 +1,8 @@
 import { betterAuth } from 'better-auth';
-// eslint-disable-next-line import/no-unresolved
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import type { FieldAttribute } from 'better-auth/db';
-// eslint-disable-next-line import/no-unresolved
 import { toNodeHandler } from 'better-auth/node';
 import { z } from 'zod';
-
-// eslint-disable-next-line import/no-unresolved
 import { db, schema } from '../db/client';
 
 const baseURL =

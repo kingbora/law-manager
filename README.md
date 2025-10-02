@@ -56,6 +56,7 @@ src/api/case/index.post.ts  -> POST /case
 ## 开发规范 (建议)
 
 - 严格 TypeScript 严格模式
+- 代码格式与校验统一由 ESLint 负责，必要时可执行 `pnpm lint -- --fix`
 - 提交前运行：`pnpm lint`、`pnpm typecheck`
 - 新增 API 时添加最小化单元测试（后续可引入 Vitest）
 

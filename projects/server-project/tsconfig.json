@@ -3,14 +3,11 @@
   "compilerOptions": {
     "target": "ES2021",
     "lib": ["ES2021"],
-      "module": "ESNext",
-      "moduleResolution": "Bundler",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "outDir": "dist",
     "types": ["node"],
     "baseUrl": ".",
-    "paths": {
-      "@law-manager/api-schema/*": ["../../packages/api-schema/src/*"]
-    }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts"],
   "exclude": ["node_modules", "dist"]
