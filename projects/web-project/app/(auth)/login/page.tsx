@@ -81,7 +81,8 @@ function LoginPageContent() {
         >
           <Input
             autoComplete="username"
-            placeholder="例如：laowang 或 laowang@example.com"
+            size="large"
+            placeholder="请输入用户名或邮箱"
           />
         </Form.Item>
 
@@ -93,11 +94,12 @@ function LoginPageContent() {
           <Input.Password
             autoComplete="current-password"
             placeholder="请输入密码"
+            size="large"
           />
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" block loading={submitting}>
+          <Button size="large" type="primary" htmlType="submit" block loading={submitting}>
             登录
           </Button>
         </Form.Item>

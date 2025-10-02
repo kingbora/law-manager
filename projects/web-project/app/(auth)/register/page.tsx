@@ -87,7 +87,7 @@ function RegisterPageContent() {
             { type: 'email', message: '邮箱格式不正确' },
           ]}
         >
-          <Input autoComplete="email" placeholder="例如：partner@example.com" />
+          <Input size="large" autoComplete="email" placeholder="请输入邮箱地址" />
         </Form.Item>
 
         <Form.Item
@@ -101,6 +101,7 @@ function RegisterPageContent() {
         >
           <Input
             autoComplete="username"
+            size="large"
             placeholder="仅支持字母、数字、- 和 _"
           />
         </Form.Item>
@@ -116,6 +117,7 @@ function RegisterPageContent() {
           <Input.Password
             autoComplete="new-password"
             placeholder="请输入密码"
+            size="large"
           />
         </Form.Item>
 
@@ -138,11 +140,12 @@ function RegisterPageContent() {
           <Input.Password
             autoComplete="new-password"
             placeholder="请再次输入密码"
+            size="large"
           />
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" block loading={submitting}>
+          <Button size="large" type="primary" htmlType="submit" block loading={submitting}>
             注册并登录
           </Button>
         </Form.Item>
