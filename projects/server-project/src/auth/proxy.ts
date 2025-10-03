@@ -1,6 +1,5 @@
 import { appendResponseHeader, getRequestHeaders, H3Event, setResponseStatus } from 'h3';
-// eslint-disable-next-line import/no-unresolved
-import { authBasePath, authInstance, authOptions } from './index';
+import { authBasePath, authInstance, authOptions } from './';
 
 type ProxyInit = {
   method: string;

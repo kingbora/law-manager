@@ -16,7 +16,7 @@ for (const dir of readdirSync(apiRoot)) {
     if (mod?.default) {
       app.use('/' + dir, mod.default);
     }
-  } catch (e) {
+  } catch (_error) {
     // ignore if file not exists
   }
 }
