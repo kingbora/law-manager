@@ -17,6 +17,23 @@ const toIsoString = (value: unknown): string => {
   return date.toISOString();
 };
 
+const readDateField = (user: Record<string, unknown>, key: string, fallbackKey: string) =>
+  toIsoString(user[key] ?? user[fallbackKey]);
+
+const toBoolean = (value: unknown) => {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value !== 0;
+  if (typeof value === 'string') {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    const num = Number(value);
+    if (!Number.isNaN(num)) {
+      return num !== 0;
+    }
+  }
+  return Boolean(value);
+};
+
 export const normalizeUser = (user: Record<string, unknown>) => {
   const username = (user.username as string | undefined) ?? (user.name as string | undefined);
   const role =
@@ -31,12 +48,16 @@ export const normalizeUser = (user: Record<string, unknown>) => {
     });
   }
 
+  const emailVerifiedRaw =
+    user.emailVerified ?? user.email_verified ?? user.isEmailVerified ?? false;
+
   return AuthUserSchema.parse({
     ...user,
+    emailVerified: toBoolean(emailVerifiedRaw),
     username,
     role,
-    createdAt: toIsoString(user.createdAt),
-    updatedAt: toIsoString(user.updatedAt),
+    createdAt: readDateField(user, 'createdAt', 'created_at'),
+    updatedAt: readDateField(user, 'updatedAt', 'updated_at'),
   });
 };
 

@@ -141,9 +141,13 @@ export default [
   {
     ignores: [
       'node_modules/**',
+      '**/node_modules/**',
       'dist/**',
+      '**/dist/**',
       '.next/**',
+      '**/.next/**',
       'coverage/**',
+      '**/coverage/**',
       'expo/**',
       'projects/mobile-project/node_modules/**',
       '**/build/**',

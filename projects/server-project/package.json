@@ -17,6 +17,7 @@
     "@law-manager/api-schema": "workspace:*",
     "better-auth": "^0.4.11",
     "drizzle-orm": "^0.33.0",
+    "dotenv": "^17.2.3",
     "h3": "^1.11.1",
     "mysql2": "^3.11.0",
     "zod": "^3.25.76"

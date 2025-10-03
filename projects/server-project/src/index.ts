@@ -1,10 +1,17 @@
+import 'dotenv/config';
 import { createApp, eventHandler, fromNodeMiddleware, toNodeListener } from 'h3';
 import { readdirSync, statSync } from 'node:fs';
 import http from 'node:http';
 import { join } from 'node:path';
 import { authBasePath, authHandler } from './auth';
+import { corsEventHandler } from './cors';
 
 const app = createApp();
+
+const isDevelopment = process.env.NODE_ENV === 'development';
+if (isDevelopment) {
+  app.use(corsEventHandler);
+}
 
 // simplistic auto route loader: maps src/api/<folder>/index.get.ts -> /<folder>
 const apiRoot = join(process.cwd(), 'src', 'api');

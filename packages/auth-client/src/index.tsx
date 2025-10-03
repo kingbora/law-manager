@@ -19,6 +19,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react';
@@ -268,7 +269,7 @@ export const createAuthContext = (client: AuthClient) => {
 
   function AuthProvider({ children }: { children: ReactNode }) {
     const [state, setState] = useState<AuthState>(initialState);
-    const [isRefreshing, setIsRefreshing] = useState(false);
+    const isRefreshingRef = useRef(false);
 
     const applyAuthPayload = useCallback((payload: LoginResponse | null) => {
       if (payload) {
@@ -289,8 +290,8 @@ export const createAuthContext = (client: AuthClient) => {
     }, []);
 
     const refresh = useCallback(async () => {
-      if (isRefreshing) return;
-      setIsRefreshing(true);
+      if (isRefreshingRef.current) return;
+      isRefreshingRef.current = true;
       try {
         const payload = await client.fetchSession();
         applyAuthPayload(payload);
@@ -303,9 +304,9 @@ export const createAuthContext = (client: AuthClient) => {
           error: '无法获取登录状态',
         });
       } finally {
-        setIsRefreshing(false);
+        isRefreshingRef.current = false;
       }
-    }, [applyAuthPayload, client, isRefreshing]);
+    }, [applyAuthPayload, client]);
 
     useEffect(() => {
       void refresh();
