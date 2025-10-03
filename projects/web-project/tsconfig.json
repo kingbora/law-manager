@@ -12,7 +12,7 @@
     "baseUrl": "./",
     "moduleResolution": "Bundler",
     "paths": {
-      "@law-manager/auth-client": ["../../packages/auth-client/src/index.tsx"],
+      "@law-manager/auth-client": ["../../packages/auth-client/src/index.ts"],
       "@law-manager/api-schema": ["../../packages/api-schema/src/index.ts"],
       "@law-manager/api-schema/*": ["../../packages/api-schema/src/*"]
     },

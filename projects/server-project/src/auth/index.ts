@@ -7,11 +7,11 @@ import { z } from 'zod';
 import { db, schema } from '../db/client';
 
 const baseURL =
-  process.env.AUTH_BASE_URL ??
-  process.env.SERVER_BASE_URL ??
-  `http://localhost:${process.env.PORT ?? 4000}`;
+  process.env.NODE_ENV === 'production' 
+      ? 'https://easy-lay.top' 
+      : `http://localhost:${process.env.PORT || 4000}`;
 
-const basePath = process.env.AUTH_BASE_PATH ?? '/auth';
+const basePath = process.env.AUTH_BASE_PATH ?? '/api/auth';
 
 const usernameField = {
   type: 'string',

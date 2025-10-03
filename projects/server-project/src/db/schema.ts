@@ -1,10 +1,8 @@
 import { sql } from 'drizzle-orm';
 import {
-  bigint,
   boolean,
   datetime,
   index,
-  int,
   mysqlEnum,
   mysqlTable,
   timestamp,
@@ -13,7 +11,7 @@ import {
 } from 'drizzle-orm/mysql-core';
 
 export const users = mysqlTable(
-  'users',
+  'user',
   {
     id: varchar('id', { length: 255 }).primaryKey(),
     email: varchar('email', { length: 255 }).notNull(),
@@ -29,17 +27,12 @@ export const users = mysqlTable(
       .notNull(),
     updatedAt: timestamp('updated_at', { mode: 'date', fsp: 3 })
       .default(sql`CURRENT_TIMESTAMP(3)`)
-      .onUpdateNow()
       .notNull(),
   },
-  (table) => ({
-    emailIdx: uniqueIndex('users_email_unique').on(table.email),
-    usernameIdx: uniqueIndex('users_username_unique').on(table.username),
-  }),
 );
 
 export const accounts = mysqlTable(
-  'accounts',
+  'account',
   {
     id: varchar('id', { length: 255 }).primaryKey(),
     providerId: varchar('provider_id', { length: 255 }).notNull(),
@@ -50,8 +43,22 @@ export const accounts = mysqlTable(
     accessToken: varchar('access_token', { length: 1024 }),
     refreshToken: varchar('refresh_token', { length: 1024 }),
     idToken: varchar('id_token', { length: 1024 }),
-    expiresAt: datetime('expires_at', { mode: 'date', fsp: 3 }),
+    accessTokenExpiresAt: datetime('access_token_expires_at', {
+      mode: 'date',
+      fsp: 3,
+    }),
+    refreshTokenExpiresAt: datetime('refresh_token_expires_at', {
+      mode: 'date',
+      fsp: 3,
+    }),
+    scope: varchar('scope', { length: 1024 }),
     password: varchar('password', { length: 255 }),
+    createdAt: timestamp('created_at', { mode: 'date', fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'date', fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
   },
   (table) => ({
     providerAccountIdx: uniqueIndex('accounts_provider_account_unique').on(
@@ -63,47 +70,54 @@ export const accounts = mysqlTable(
 );
 
 export const sessions = mysqlTable(
-  'sessions',
+  'session',
   {
     id: varchar('id', { length: 255 }).primaryKey(),
     userId: varchar('user_id', { length: 255 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
+    token: varchar('token', { length: 255 }).notNull(),
     expiresAt: datetime('expires_at', { mode: 'date', fsp: 3 }).notNull(),
     ipAddress: varchar('ip_address', { length: 255 }),
     userAgent: varchar('user_agent', { length: 1024 }),
+    createdAt: timestamp('created_at', { mode: 'date', fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'date', fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
   },
   (table) => ({
+    tokenIdx: uniqueIndex('sessions_token_unique').on(table.token),
     userIdx: index('sessions_user_idx').on(table.userId),
     expiresIdx: index('sessions_expires_idx').on(table.expiresAt),
   }),
 );
 
 export const verifications = mysqlTable(
-  'verifications',
+  'verification',
   {
     id: varchar('id', { length: 255 }).primaryKey(),
     identifier: varchar('identifier', { length: 255 }).notNull(),
     value: varchar('value', { length: 255 }).notNull(),
     expiresAt: datetime('expires_at', { mode: 'date', fsp: 3 }).notNull(),
+    createdAt: timestamp('created_at', { mode: 'date', fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'date', fsp: 3 })
+      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .notNull(),
   },
   (table) => ({
     identifierIdx: uniqueIndex('verifications_identifier_unique').on(table.identifier),
   }),
 );
 
-export const rateLimit = mysqlTable('rate_limit', {
-  key: varchar('key', { length: 255 }).primaryKey(),
-  count: int('count').notNull().default(0),
-  lastRequest: bigint('last_request', { mode: 'number' }).notNull().default(0),
-});
-
 export const schema = {
   user: users,
   account: accounts,
   session: sessions,
   verification: verifications,
-  rateLimit,
 };
 
 export type Schema = typeof schema;

@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
+    "@types/cors": "^2.8.19",
     "drizzle-kit": "^0.23.0",
     "tsx": "^4.16.0",
     "typescript": "~5.5.4"

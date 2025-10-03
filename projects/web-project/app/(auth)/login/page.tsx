@@ -4,9 +4,7 @@ import { Alert, Button, Form, Input, Spin, Typography, message } from 'antd';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useState } from 'react';
-
-import { ApiError } from '@law-manager/auth-client';
-import { useAuth } from '../../auth-context';
+import { ApiError, useAuth } from '@law-manager/auth-client';
 
 export const dynamic = 'force-dynamic';
 
