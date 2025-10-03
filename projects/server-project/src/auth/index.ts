@@ -2,6 +2,7 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import type { FieldAttribute } from 'better-auth/db';
 import { toNodeHandler } from 'better-auth/node';
+import { AuthUserRoles } from '@law-manager/api-schema/auth';
 import { z } from 'zod';
 import { db, schema } from '../db/client';
 
@@ -24,9 +25,25 @@ const usernameField = {
     .regex(/^[a-zA-Z0-9_-]+$/),
 } satisfies FieldAttribute<'string'>;
 
-const ensureNameFromUsername = (user: { name?: string; username?: string }) => {
+const roleField = {
+  type: 'string',
+  required: false,
+  fieldName: 'role',
+  defaultValue: 'assistant',
+  validator: z.enum(AuthUserRoles),
+} satisfies FieldAttribute<'string'>;
+
+const ensureUserDefaults = (user: {
+  name?: string;
+  username?: string;
+  role?: string;
+}) => {
   if ((!user.name || user.name.length === 0) && user.username) {
     user.name = user.username;
+  }
+
+  if (!user.role || !AuthUserRoles.includes(user.role as (typeof AuthUserRoles)[number])) {
+    user.role = 'assistant';
   }
 };
 
@@ -42,6 +59,7 @@ const auth = betterAuth({
   user: {
     additionalFields: {
       username: usernameField,
+      role: roleField,
     },
   },
   emailAndPassword: {
@@ -54,12 +72,16 @@ const auth = betterAuth({
     user: {
       create: {
         before: async (user) => {
-          ensureNameFromUsername(user as unknown as { name?: string; username?: string });
+          ensureUserDefaults(
+            user as unknown as { name?: string; username?: string; role?: string },
+          );
         },
       },
       update: {
         before: async (user) => {
-          ensureNameFromUsername(user as unknown as { name?: string; username?: string });
+          ensureUserDefaults(
+            user as unknown as { name?: string; username?: string; role?: string },
+          );
         },
       },
     },

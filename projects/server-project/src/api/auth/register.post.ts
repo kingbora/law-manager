@@ -21,6 +21,7 @@ export default eventHandler(async (event) => {
     body: JSON.stringify({
       ...payload,
       name: payload.username,
+      role: 'assistant',
     }),
   });
 

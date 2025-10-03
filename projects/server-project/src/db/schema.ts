@@ -5,6 +5,7 @@ import {
   datetime,
   index,
   int,
+  mysqlEnum,
   mysqlTable,
   timestamp,
   uniqueIndex,
@@ -20,6 +21,9 @@ export const users = mysqlTable(
     username: varchar('username', { length: 64 }).notNull(),
     name: varchar('name', { length: 255 }).notNull(),
     image: varchar('image', { length: 512 }),
+    role: mysqlEnum('role', ['master', 'admin', 'sale', 'lawyer', 'assistant'])
+      .default('assistant')
+      .notNull(),
     createdAt: timestamp('created_at', { mode: 'date', fsp: 3 })
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),

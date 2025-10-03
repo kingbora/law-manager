@@ -1,10 +1,21 @@
 import { z } from 'zod';
 
+export const AuthUserRoles = [
+  'master',
+  'admin',
+  'sale',
+  'lawyer',
+  'assistant',
+] as const;
+
+export type AuthUserRole = (typeof AuthUserRoles)[number];
+
 export const AuthUserSchema = z.object({
   id: z.string().min(1),
   email: z.string().email(),
   username: z.string().min(3).max(64),
   emailVerified: z.boolean().default(false),
+  role: z.enum(AuthUserRoles),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });

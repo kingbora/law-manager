@@ -1,4 +1,9 @@
-import { AuthUserSchema, SessionSchema } from '@law-manager/api-schema/auth';
+import {
+  AuthUserRoles,
+  AuthUserSchema,
+  type AuthUserRole,
+  SessionSchema,
+} from '@law-manager/api-schema/auth';
 import { createError } from 'h3';
 
 const toIsoString = (value: unknown): string => {
@@ -14,6 +19,10 @@ const toIsoString = (value: unknown): string => {
 
 export const normalizeUser = (user: Record<string, unknown>) => {
   const username = (user.username as string | undefined) ?? (user.name as string | undefined);
+  const role =
+    (AuthUserRoles.find((item) => item === (user.role as string | undefined)) as
+      | AuthUserRole
+      | undefined) ?? 'assistant';
 
   if (!username) {
     throw createError({
@@ -25,6 +34,7 @@ export const normalizeUser = (user: Record<string, unknown>) => {
   return AuthUserSchema.parse({
     ...user,
     username,
+    role,
     createdAt: toIsoString(user.createdAt),
     updatedAt: toIsoString(user.updatedAt),
   });
