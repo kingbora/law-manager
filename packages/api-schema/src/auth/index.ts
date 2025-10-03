@@ -39,6 +39,7 @@ export type RegisterRequest = z.infer<typeof RegisterRequestSchema>;
 
 export const RegisterResponseSchema = z.object({
   user: AuthUserSchema,
+  session: SessionSchema.optional(),
 });
 
 export type RegisterResponse = z.infer<typeof RegisterResponseSchema>;

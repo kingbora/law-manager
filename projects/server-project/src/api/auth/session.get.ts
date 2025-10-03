@@ -2,7 +2,7 @@ import { LoginResponseSchema } from '@law-manager/api-schema/auth';
 import { assertMethod, createError, eventHandler } from 'h3';
 
 import { proxyAuthRequest } from '../../auth/proxy';
-import { normalizeSession, normalizeUser } from './utils';
+import { normalizeAuthError, normalizeSession, normalizeUser } from './utils';
 
 type SessionPayload = {
   user: Record<string, unknown>;
@@ -21,10 +21,11 @@ export default eventHandler(async (event) => {
   }
 
   if (!response.ok) {
+    const error = normalizeAuthError(response.data, 'Failed to fetch session');
     throw createError({
       statusCode: response.status,
-      statusMessage: 'Failed to fetch session',
-      data: response.data,
+      statusMessage: error.error,
+      data: error,
     });
   }
 

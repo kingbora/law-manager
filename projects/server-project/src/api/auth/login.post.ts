@@ -5,7 +5,7 @@ import { assertMethod, createError, eventHandler, readBody } from 'h3';
 import { proxyAuthRequest } from '../../auth/proxy';
 import { db } from '../../db/client';
 import { users } from '../../db/schema';
-import { normalizeSession, normalizeUser } from './utils';
+import { normalizeAuthError, normalizeSession, normalizeUser } from './utils';
 
 export default eventHandler(async (event) => {
   assertMethod(event, 'POST');
@@ -47,10 +47,11 @@ export default eventHandler(async (event) => {
   });
 
   if (!response.ok) {
+    const error = normalizeAuthError(response.data, 'Login failed');
     throw createError({
       statusCode: response.status,
-      statusMessage: 'Login failed',
-      data: response.data,
+      statusMessage: error.error,
+      data: error,
     });
   }
 

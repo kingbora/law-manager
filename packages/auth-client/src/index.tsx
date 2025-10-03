@@ -332,12 +332,21 @@ export const createAuthContext = (client: AuthClient) => {
       async (payload: RegisterRequest) => {
         setState((prev: AuthState) => ({ ...prev, error: null }));
         try {
-          await client.register(payload);
-          const data = await client.login({
+          const registerResponse = await client.register(payload);
+
+          if (registerResponse.session) {
+            applyAuthPayload({
+              user: registerResponse.user,
+              session: registerResponse.session,
+            });
+            return;
+          }
+
+          const loginResponse = await client.login({
             identifier: payload.username,
             password: payload.password,
           });
-          applyAuthPayload(data);
+          applyAuthPayload(loginResponse);
         } catch (error) {
           const message =
             error instanceof ApiError ? error.message : '注册失败，请稍后再试';

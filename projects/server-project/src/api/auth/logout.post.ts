@@ -2,6 +2,7 @@ import { LogoutResponseSchema } from '@law-manager/api-schema/auth';
 import { assertMethod, createError, eventHandler } from 'h3';
 
 import { proxyAuthRequest } from '../../auth/proxy';
+import { normalizeAuthError } from './utils';
 
 export default eventHandler(async (event) => {
   assertMethod(event, 'POST');
@@ -11,10 +12,11 @@ export default eventHandler(async (event) => {
   });
 
   if (!response.ok) {
+    const error = normalizeAuthError(response.data, 'Logout failed');
     throw createError({
       statusCode: response.status,
-      statusMessage: 'Logout failed',
-      data: response.data,
+      statusMessage: error.error,
+      data: error,
     });
   }
 

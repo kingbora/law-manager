@@ -2,7 +2,7 @@ import { RegisterRequestSchema, RegisterResponseSchema } from '@law-manager/api-
 import { assertMethod, createError, eventHandler, readBody } from 'h3';
 
 import { proxyAuthRequest } from '../../auth/proxy';
-import { normalizeUser } from './utils';
+import { normalizeAuthError, normalizeSession, normalizeUser } from './utils';
 
 export default eventHandler(async (event) => {
   assertMethod(event, 'POST');
@@ -26,14 +26,19 @@ export default eventHandler(async (event) => {
   });
 
   if (!response.ok) {
+    const error = normalizeAuthError(response.data, 'Registration failed');
     throw createError({
       statusCode: response.status,
-      statusMessage: 'Registration failed',
-      data: response.data,
+      statusMessage: error.error,
+      data: error,
     });
   }
 
   const user = normalizeUser(response.data.user);
+  const session = response.data.session ? normalizeSession(response.data.session) : undefined;
 
-  return RegisterResponseSchema.parse({ user });
+  return RegisterResponseSchema.parse({
+    user,
+    session,
+  });
 });

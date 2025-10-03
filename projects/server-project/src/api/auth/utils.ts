@@ -2,6 +2,7 @@ import {
   AuthUserRoles,
   AuthUserSchema,
   type AuthUserRole,
+  AuthError,
   SessionSchema,
 } from '@law-manager/api-schema/auth';
 import { createError } from 'h3';
@@ -66,3 +67,40 @@ export const normalizeSession = (session: Record<string, unknown>) =>
     token: session.id,
     expiresAt: toIsoString(session.expiresAt),
   });
+
+const toOptionalString = (value: unknown) => {
+  if (typeof value === 'string' && value.trim().length > 0) {
+    return value;
+  }
+
+  if (value instanceof Error && value.message) {
+    return value.message;
+  }
+
+  return undefined;
+};
+
+export const normalizeAuthError = (payload: unknown, fallback: string): AuthError => {
+  if (payload && typeof payload === 'object') {
+    const source = payload as Record<string, unknown>;
+    const message = toOptionalString(source.message);
+    const error =
+      toOptionalString(source.error) ??
+      message ??
+      fallback;
+
+    const details =
+      toOptionalString(source.details) ??
+      (message && message !== error ? message : undefined);
+
+    return {
+      error,
+      ...(details ? { details } : {}),
+    } satisfies AuthError;
+  }
+
+  const stringPayload = toOptionalString(payload);
+  return {
+    error: stringPayload ?? fallback,
+  } satisfies AuthError;
+};
