@@ -1,3 +1,10 @@
-import { eventHandler } from 'h3';
+import { Router } from 'express';
+import type { Request, Response } from 'express';
 
-export default eventHandler(() => ({ status: 'ok', timestamp: Date.now() }));
+const router = Router();
+
+router.get('/', (_req: Request, res: Response) => {
+	res.json({ status: 'ok', timestamp: Date.now() });
+});
+
+export default router;

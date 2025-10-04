@@ -2,6 +2,7 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import type { FieldAttribute } from 'better-auth/db';
 import { toNodeHandler } from 'better-auth/node';
+import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import { AuthUserRoles } from '@law-manager/api-schema/auth';
 import { z } from 'zod';
 import { db, schema } from '../db/client';
@@ -9,7 +10,7 @@ import { db, schema } from '../db/client';
 const baseURL =
   process.env.NODE_ENV === 'production' 
       ? 'https://easy-lay.top' 
-      : `http://localhost:${process.env.PORT || 4000}`;
+      : `http://localhost:3000`;
 
 const basePath = process.env.AUTH_BASE_PATH ?? '/api/auth';
 
@@ -18,20 +19,24 @@ const usernameField = {
   required: true,
   unique: true,
   fieldName: 'username',
-  validator: z
-    .string()
-    .min(3)
-    .max(64)
-    .regex(/^[a-zA-Z0-9_-]+$/),
-} satisfies FieldAttribute<'string'>;
+  validator: {
+    input: z
+      .string()
+      .min(3)
+      .max(64)
+      .regex(/^[a-zA-Z0-9_-]+$/),
+  },
+} satisfies FieldAttribute;
 
 const roleField = {
   type: 'string',
   required: false,
   fieldName: 'role',
   defaultValue: 'assistant',
-  validator: z.enum(AuthUserRoles),
-} satisfies FieldAttribute<'string'>;
+  validator: {
+    input: z.enum(AuthUserRoles),
+  },
+} satisfies FieldAttribute;
 
 const ensureUserDefaults = (user: {
   name?: string;
@@ -66,7 +71,6 @@ const auth = betterAuth({
     enabled: true,
     minPasswordLength: Number(process.env.AUTH_MIN_PASSWORD_LENGTH ?? 8),
     maxPasswordLength: Number(process.env.AUTH_MAX_PASSWORD_LENGTH ?? 128),
-    sendEmailVerificationOnSignUp: process.env.AUTH_SEND_VERIFICATION_ON_SIGNUP === 'true',
   },
   databaseHooks: {
     user: {
@@ -88,7 +92,19 @@ const auth = betterAuth({
   },
 });
 
-export const authHandler = toNodeHandler(auth.handler);
+const nodeHandler = toNodeHandler(auth.handler);
+
+export const authHandler: RequestHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    await nodeHandler(req, res);
+  } catch (error) {
+    next(error);
+  }
+};
 export const authApi = auth.api;
 export const authOptions = auth.options;
 export const authInstance = auth;

@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import React, { useMemo } from 'react';
 
 import { useAuth } from '../auth-context';
+import DashboardShell from '../../components/dashboard/DashboardShell';
 
 const overviewMetrics = [
   { title: '待处理案件', value: 8, suffix: '件', color: '#1677ff' },
@@ -44,7 +45,8 @@ export default function DashboardOverviewPage() {
   }, []);
 
   return (
-    <div style={{ padding: '24px 0' }}>
+    <DashboardShell>
+      <div style={{ padding: '24px 0' }}>
       <Typography.Title level={3} style={{ marginBottom: 8 }}>
         {greeting}，{user?.username ?? '团队成员'}
       </Typography.Title>
@@ -114,6 +116,7 @@ export default function DashboardOverviewPage() {
         </Col>
       </Row>
     </div>
+    </DashboardShell>
   );
 }
 
