@@ -9,3 +9,4 @@ expo/
 coverage
 *.log
 tsconfig.tsbuildinfo
+.__temp__

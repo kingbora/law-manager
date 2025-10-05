@@ -47,7 +47,7 @@ export default function DashboardOverviewPage() {
   return (
     <DashboardShell>
       <div style={{ padding: '24px 0' }}>
-      <Typography.Title level={3} style={{ marginBottom: 8 }}>
+      <Typography.Title level={3} style={{ marginBottom: 8, marginTop: 0 }}>
         {greeting}，{user?.username ?? '团队成员'}
       </Typography.Title>
       <Typography.Paragraph type='secondary' style={{ marginBottom: 32 }}>
